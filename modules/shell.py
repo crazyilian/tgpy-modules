@@ -3,7 +3,7 @@
     name: shell
     needs:
       dot: 0.1.0
-    version: 0.0.0
+    version: 0.1.0
 """
 import asyncio
 import subprocess

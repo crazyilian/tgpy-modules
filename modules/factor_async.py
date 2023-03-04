@@ -2,7 +2,7 @@
     description: factorize numbers asynchronously
     name: factor_async
     needs:
-      run_shell: 0.0.0
+      shell: 0.1.0
       await_utils: 0.0.0
     needs_pip:
       sympy: sympy
