@@ -1,9 +1,9 @@
 """
-    description: run and use shell via .sh & run shell functions
     name: shell
+    version: 0.2.0
+    description: run and use shell via .sh & run shell functions
     needs:
-      dot: 0.1.0
-    version: 0.1.0
+        dot: 0.1.0
 """
 import asyncio
 import subprocess
@@ -21,6 +21,6 @@ def run_sync_shell(arguments, capture_output=True, check=True, encoding='utf-8',
 
 
 @dot('sh')
-async def sh(code=''):
+async def shell(code=''):
     text, returncode = await run_shell(code)
     return text + (f"\n\nReturn code: {returncode}" if returncode != 0 else "")
