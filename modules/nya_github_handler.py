@@ -5,7 +5,7 @@
       nya: 0.32.6
     needs_pip:
       github: pygithub
-    version: 0.1.0
+    version: 0.1.1
 """
 from urllib.parse import urlparse
 import tgpy.api
@@ -48,7 +48,7 @@ class GithubHandler:
         self.gh = github.Github(token)
         tgpy.api.config.set(f'nya_github_handler.token', token)
 
-    async def share_urls(self, src, recursive=True, extensions=('.py',), use_raw=False):
+    async def share_urls(self, src, recursive=True, extensions=('.py',), use_raw=True):
         """Share url of file or every file in directory (nya registry format)"""
         repo_name, branch, dir_path = self.parse_src(src)
         repo = self.gh.get_repo(repo_name)
