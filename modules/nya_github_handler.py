@@ -5,7 +5,7 @@
       nya: 0.32.6
     needs_pip:
       github: pygithub
-    version: 0.1.1
+    version: 0.1.2
 """
 from urllib.parse import urlparse
 import tgpy.api
