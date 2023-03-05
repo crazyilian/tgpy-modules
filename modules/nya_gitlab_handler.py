@@ -5,7 +5,7 @@
       nya: 0.32.6
     needs_pip:
       gitlab: python-gitlab
-    version: 0.0.0
+    version: 0.0.1
 """
 from urllib.parse import urlparse
 import tgpy.api
@@ -16,7 +16,7 @@ class GitlabHandler:
     def __init__(self):
         pass
 
-    def handler(self, src):
+    async def handler(self, src):
         parsed = urlparse(src)
         domain = parsed.scheme + '://' + parsed.netloc
         path = parsed.path.strip('/').split('/')

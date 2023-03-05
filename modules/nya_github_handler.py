@@ -5,7 +5,7 @@
       nya: 0.32.6
     needs_pip:
       github: pygithub
-    version: 0.0.0
+    version: 0.0.1
 """
 from urllib.parse import urlparse
 import tgpy.api
@@ -16,7 +16,7 @@ class GithubHandler:
     def __init__(self):
         self.gh = github.Github(self.get_token())
 
-    def handler(self, src):
+    async def handler(self, src):
         path = urlparse(src).path.strip('/').split('/')
         repo = path[0] + '/' + path[1]
         branch = path[3]
