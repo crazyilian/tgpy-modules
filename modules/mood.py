@@ -62,36 +62,34 @@ def extract_text(msg):
     return text
 
 
-async def topmoodcnt(topcnt_=1000):
-    ct = datetime.now().astimezone()
-    texts = []
-    ids = []
-    topcnt = 0
-    async for mess in client.iter_messages(ctx.msg.chat_id):
-        if topcnt + 1 > topcnt_:
-            break
-        topcnt += 1
-        text = extract_text(mess)
-        if text:
-            texts.append(mess.text)
-            ids.append(mess.id)
-    await predict_and_get_top_results(ids, texts, f'among the last {topcnt}', ctx.msg)
-    return 'Done'
-
-
-async def topmood(days=1):
+async def topmood(days=1, cnt=None):
+    if cnt is not None:
+        days = None
     msg = ctx.msg
     ct = datetime.now().astimezone()
     texts = []
     ids = []
+    cnt_messages = 0
     async for mess in client.iter_messages(msg.chat_id):
-        if (ct - mess.date).days >= days:
-            break
+        if days:
+            if (ct - mess.date).days >= days:
+                break
+        if cnt:
+            if cnt_messages >= cnt:
+                break
         text = extract_text(mess)
         if text:
             texts.append(mess.text)
             ids.append(mess.id)
-    await predict_and_get_top_results(ids, texts, 'of the day', msg)
+            cnt_messages += 1
+    title = None
+    if days is None:
+        title = f'among the last {cnt}'
+    elif days == 1:
+        title = 'of the day'
+    elif days > 1:
+        title = f'of the last {days} days'
+    await predict_and_get_top_results(ids, texts, title, msg)
     return 'Done'
 
 
@@ -105,4 +103,4 @@ async def sentiment():
 
 install_fasttext()
 
-__all__ = ['sentiment', 'topmood', 'topmoodcnt']
+__all__ = ['sentiment', 'topmood']
