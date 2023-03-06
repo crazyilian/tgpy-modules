@@ -3,7 +3,7 @@
     name: shvenv
     needs:
       dot: 0.1.0
-      shell: 0.1.0
+      shell: 0.2.0
     version: 0.1.0
 """
 
