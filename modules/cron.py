@@ -58,5 +58,6 @@ def cron_stop_working():
     nonlocal cron_task
     cron_task.cancel()
 
+add_job = cron_add_job
 
-__all__ = ['cron_add_job']
+__all__ = ['cron_add_job', 'add_job']
