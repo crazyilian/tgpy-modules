@@ -15,4 +15,4 @@ def set_tgpy_prefix(prefix=DEFAULT_TITLE):
     tgpy.api.config.set('message_design.prefix', prefix)
 
 
-__all__ = [set_tgpy_prefix]
+__all__ = ['set_tgpy_prefix']
