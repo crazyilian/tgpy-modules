@@ -1,6 +1,6 @@
 """
     description: factorize numbers asynchronously
-    name: factor_async
+    name: factor
     needs:
       shell: 0.1.0
       await_utils: 0.0.0
