@@ -5,12 +5,20 @@
     needs:
       config_loader: 0.0.0
       tg_name: 0.0.0
-    version: 0.1.1
+    version: 0.2.0
 """
 import telethon
+import re
 
 handle_yes_no_chats = set()
 really_handling_yes_no_chats = set()
+
+last_word_re = re.compile(r"(^|^.*?\W)(\w*)\W*$", re.DOTALL)
+
+
+def get_last_word(s):
+    m = last_word_re.match(s)
+    return m.group(2)
 
 
 class YesNoAnswers:
@@ -41,12 +49,13 @@ class YesNoAnswers:
             if event.chat_id not in self.chats:
                 return
             for word, suffix in self.config.suffixes.items():
-                if not event.text.lower().endswith(suffix):
+                if not get_last_word(event.text.lower()).endswith(suffix.lower()):
                     continue
                 orig = await event.get_reply_message()
-                if orig and orig.text.lower().split()[-1:] == [word]:
-                    await event.reply("Ловко парировал(а) " + get_name(event.sender))
-                    break
+                if not orig or get_last_word(orig.text.lower()) != word.lower():
+                    continue
+                await event.reply("Ловко парировал(а) " + get_name(event.sender))
+                break
 
     def remove_chat(self, *chats):
         """remove chat handlers"""
