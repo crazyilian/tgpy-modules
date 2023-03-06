@@ -5,7 +5,7 @@
       config_loader: 0.0.0
       pet_bot: 0.0.0
       tg_name: 0.0.0
-    version: 0.0.0
+    version: 0.0.1
 """
 import telethon
 import asyncio
@@ -41,7 +41,8 @@ class TrackLastSeenModule:
 
         @client.on(telethon.events.UserUpdate(chats=add_handler, func=lambda e: e.status))
         async def user_update_event_handler(event):
-            name = self.config.watches.get(event.user_id, None)
+            me = client.get_me()
+            name = self.config.watches.get(event.user_id, None) if event.user_id != me.id else me.first_name
             if name is None:
                 return
             text = ''
