@@ -5,7 +5,7 @@
       config_loader: 0.0.0
       pet_bot: 0.0.0
       tg_name: 0.0.0
-    version: 0.0.1
+    version: 0.0.2
 """
 import telethon
 import asyncio
@@ -18,6 +18,12 @@ class TrackLastSeenModule:
                                    default_dict={'watches': {}})
         self.handlers = []
         asyncio.create_task(self.add(*self.config.watches.keys()))
+        self.me = None
+
+    async def get_me(self):
+        if self.me is None:
+            self.me = await client.get_me()
+        return self.me
 
     async def get_id_name_by_entities(self, entities):
         res = {}
@@ -41,7 +47,7 @@ class TrackLastSeenModule:
 
         @client.on(telethon.events.UserUpdate(chats=add_handler, func=lambda e: e.status))
         async def user_update_event_handler(event):
-            me = client.get_me()
+            me = await self.get_me()
             name = self.config.watches.get(event.user_id, None) if event.user_id != me.id else me.first_name
             if name is None:
                 return
