@@ -3,7 +3,7 @@
     name: pet_bot
     needs:
       config_loader: 0.0.0
-    version: 0.0.0
+    version: 0.0.1
 """
 import telethon
 from tgpy.utils import DATA_DIR
@@ -38,7 +38,7 @@ class PetBot:
         await self.bot.send_message(chat_id, text, **kwargs)
 
     def __getattr__(self, item):
-        return self.bot.item
+        return getattr(self.bot, item)
 
 
 pet_bot = PetBot()
