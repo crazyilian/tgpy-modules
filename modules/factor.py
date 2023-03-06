@@ -6,7 +6,7 @@
       await_utils: 0.0.0
     needs_pip:
       sympy: sympy
-    version: 0.1.0
+    version: 0.1.1
 """
 from collections import defaultdict
 import sympy
