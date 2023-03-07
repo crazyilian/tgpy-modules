@@ -5,7 +5,7 @@
     needs:
       config_loader: 0.0.0
       tg_name: 0.0.0
-    version: 0.2.0
+    version: 0.3.0
 """
 import telethon
 import re
@@ -49,7 +49,8 @@ class YesNoAnswers:
             if event.chat_id not in self.chats:
                 return
             for word, suffix in self.config.suffixes.items():
-                if not get_last_word(event.text.lower()).endswith(suffix.lower()):
+                answer_last_word = get_last_word(event.text.lower())
+                if not answer_last_word.endswith(suffix.lower()) or answer_last_word == word.lower():
                     continue
                 orig = await event.get_reply_message()
                 if not orig or get_last_word(orig.text.lower()) != word.lower():
