@@ -36,19 +36,18 @@ async def tex_hook(message=None, is_edit=None):
     if text.startswith(".tex ") or text.startswith(".tex\n"):
         text = text[5:]
     elif text.startswith(".ntex ") or text.startswith(".ntex\n"):
-        return await message.edit(text[6:])
+        await message.edit(text[6:])
+        return
     else:
         is_tex_text = is_autotex() and any(c in text for c in AUTOACTIVATE)
         if not is_tex_text:
-            return message
+            return
 
     for f, t in ALIAS.items():
         text = text.replace(f, t)
     text = unicodeit.replace(text)
     if text != message.text:
-        return await message.edit(text)
-    else:
-        return
+        await message.edit(text)
 
 
 def autotex(flag=True):
