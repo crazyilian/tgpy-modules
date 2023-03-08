@@ -1,7 +1,7 @@
 """
     description: apply tex automatically and via .tex
     name: tex
-    version: 0.1.1
+    version: 0.1.2
 """
 import re
 import tgpy.api
@@ -243,6 +243,9 @@ ALPHABET = {
     "\\leftharpoondown": "↽",
     "\\rightharpoondown": "⇁",
 }
+
+for c in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ':
+    ALPHABET['\\' + c * 2] = ALPHABET[f'\\mathbb{{{c}}}']
 
 ALPHABET = {k: v for (k, v) in sorted(ALPHABET.items(), reverse=True)}
 
