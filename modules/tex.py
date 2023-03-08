@@ -1,7 +1,7 @@
 """
     description: apply tex automatically and via .tex
     name: tex
-    version: 0.2.2
+    version: 0.3.0
     needs_pip:
       unicodeit: unicodeit
 """
@@ -38,7 +38,7 @@ async def tex_hook(message=None, is_edit=None):
     elif text.startswith(".ntex ") or text.startswith(".ntex\n"):
         return await message.edit(text[6:])
     else:
-        is_tex_text = any(c in text for c in AUTOACTIVATE)
+        is_tex_text = is_autotex() and any(c in text for c in AUTOACTIVATE)
         if not is_tex_text:
             return message
 
@@ -51,6 +51,16 @@ async def tex_hook(message=None, is_edit=None):
         return
 
 
+def autotex(flag=True):
+    """set auto activation of .tex to `flag`"""
+    tgpy.api.config.set('tex.auto_activate', flag)
+
+
+def is_autotex():
+    """get if auto activation of .tex is true"""
+    return tgpy.api.config.get('tex.auto_activate', True)
+
+
 tgpy.api.exec_hooks.add('tex', tex_hook)
 
-__all__ = []
+__all__ = ['autotex', 'is_autotex']
