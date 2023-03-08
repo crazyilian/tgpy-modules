@@ -1,7 +1,7 @@
 """
     description: apply tex automatically and via .tex
     name: tex
-    version: 0.2.1
+    version: 0.2.2
     needs_pip:
       unicodeit: unicodeit
 """
@@ -16,17 +16,19 @@ AUTOACTIVATE = ['^', r'\Alpha', r'\alpha', r'\Beta', r'\beta', r'\Gamma', r'\gam
                 r'\Omega', r'\omega', r'\mathbb', r'\mathcal', r'\ne', r'\approx', r'\le', r'\ge', r'\leqslant',
                 r'\geqslant', r'\pm', r'\mp', r'\times', r'\cdot', r'\div', r'\sqrt', r'\angle', r'\perp', r'\parallel',
                 r'\cong', r'\sim', r'\triangle', r'\equiv', r'\triangleq', r'\propto', r'\infty', r'\ll', r'\gg',
-                r'\lfloor', r'\rfloor', r'\lceil', r'\rceil', r'\circ', r'\cap', r'\cup', r'\not\\subset', r'\subseteq',
-                r'\subset', r'\not\\superset', r'\superseteq', r'\superset', r'\not\\in', r'\in', r'\emptyset', r'\lor',
-                r'\land', r'\neg', r'\oplus', r'\implies', r'\iff', r'\forall', r'\exists', r'\nexists', r'\therefore',
-                r'\because', r'\int', r'\oint', r'\del', r'\preceq', r'\prec', r'\succeq', r'\succ', r'\d',
-                r'\dots', r'\vdots', r'\cdots', r'\ddots', r'\qed', r'\sum', r'\prod', r'\leftarrow', r'\rightarrow',
-                r'\uparrow', r'\downarrow', r'\leftrightarrow', r'\updownarrow', r'\Leftarrow', r'\Rightarrow',
-                r'\Uparrow', r'\Downarrow', r'\Leftrightarrow', r'\Updownarrow', r'\to', r'\mapsto', r'\nearrow',
-                r'\searrow', r'\swarrow', r'\nwarrow', r'\hookleftarrow', r'\hookrightarrow', r'\leftharpoonup',
-                r'\rightharpoonup', r'\leftharpoondown', r'\rightharpoondown', r'\AA', r'\BB', r'\CC', r'\DD', r'\EE',
-                r'\FF', r'\GG', r'\HH', r'\II', r'\JJ', r'\KK', r'\LL', r'\MM', r'\NN', r'\OO', r'\PP', r'\QQ', r'\RR',
-                r'\SS', r'\TT', r'\UU', r'\VV', r'\WW', r'\XX', r'\YY', r'\ZZ']
+                r'\lfloor', r'\rfloor', r'\lceil', r'\rceil', r'\circ', r'\cap', r'\cup', r'\subseteq', r'\subset',
+                r'\not', r'\superseteq', r'\superset', r'\in', r'\emptyset', r'\lor', r'\land', r'\neg', r'\oplus',
+                r'\implies', r'\iff', r'\forall', r'\exists', r'\nexists', r'\therefore', r'\because', r'\int',
+                r'\oint', r'\del', r'\preceq', r'\prec', r'\succeq', r'\succ', r'\d', r'\dots', r'\vdots', r'\cdots',
+                r'\ddots', r'\qed', r'\sum', r'\prod', r'\leftarrow', r'\rightarrow', r'\uparrow', r'\downarrow',
+                r'\leftrightarrow', r'\updownarrow', r'\Leftarrow', r'\Rightarrow', r'\Uparrow', r'\Downarrow',
+                r'\Leftrightarrow', r'\Updownarrow', r'\to', r'\mapsto', r'\nearrow', r'\searrow', r'\swarrow',
+                r'\nwarrow', r'\hookleftarrow', r'\hookrightarrow', r'\leftharpoonup', r'\rightharpoonup',
+                r'\leftharpoondown', r'\rightharpoondown', r'\AA', r'\BB', r'\CC', r'\DD', r'\EE', r'\FF', r'\GG',
+                r'\HH', r'\II', r'\JJ', r'\KK', r'\LL', r'\MM', r'\NN', r'\OO', r'\PP', r'\QQ', r'\RR', r'\SS', r'\TT',
+                r'\UU', r'\VV', r'\WW', r'\XX', r'\YY', r'\ZZ']
+
+ALIAS = {'\\' + c * 2: f'\\mathbb{{{c}}}' for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'}
 
 
 async def tex_hook(message=None, is_edit=None):
@@ -40,9 +42,13 @@ async def tex_hook(message=None, is_edit=None):
         if not is_tex_text:
             return message
 
+    for f, t in ALIAS.items():
+        text = text.replace(f, t)
     text = unicodeit.replace(text)
     if text != message.text:
         return await message.edit(text)
+    else:
+        return
 
 
 tgpy.api.exec_hooks.add('tex', tex_hook)
