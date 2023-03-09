@@ -47,24 +47,32 @@ ALIAS |= {
 }
 
 REPLS = unicodeit.data.REPLACEMENTS
+REPLS_DICT = dict(REPLS)
 unicodeit_REPLACEMENTS = REPLS.copy()
 
 
 def reset_replacements():
+    global REPLS_DICT
     REPLS.clear()
     REPLS.extend(unicodeit_REPLACEMENTS.copy())
+    REPLS_DICT = dict(REPLS)
 
 
 def add_replacements(aliases):
-    key_vals = aliases.copy()
+    key_alias = aliases.copy()
     for i in range(len(REPLS) - 1, -1, -1):
         key = REPLS[i][0]
-        if key in key_vals:
+        if key in key_alias:
+            alias = key_alias[key]
+            val = REPLS_DICT.get(alias, alias)
             REPLS.pop(i)
-            REPLS.append((key, key_vals[key]))
-            key_vals.pop(key)
-    for key, val in key_vals.items():
+            REPLS.append((key, val))
+            key_alias.pop(key)
+            REPLS_DICT[key] = val
+    for key, alias in key_alias.items():
+        val = REPLS_DICT.get(alias, alias)
         REPLS.append((key, val))
+        REPLS_DICT[key] = val
     REPLS.sort(key=lambda el: -len(el[0]))
 
 
