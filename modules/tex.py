@@ -1,7 +1,7 @@
 """
     description: apply tex automatically and via .tex
     name: tex
-    version: 0.3.1
+    version: 0.3.2
     needs_pip:
       unicodeit: unicodeit
 """
@@ -73,8 +73,7 @@ async def tex_hook(message=None, is_edit=None):
     if text.startswith(".tex ") or text.startswith(".tex\n"):
         text = text[5:]
     elif text.startswith(".ntex ") or text.startswith(".ntex\n"):
-        await message.edit(text[6:])
-        return
+        return await message.edit(text[6:])
     else:
         is_tex_text = is_autotex() and any(c in text for c in AUTOACTIVATE)
         if not is_tex_text:
@@ -85,7 +84,7 @@ async def tex_hook(message=None, is_edit=None):
 
     text = unicodeit.replace(text)
     if text != message.text:
-        await message.edit(text)
+        return await message.edit(text)
 
 
 def autotex(flag=True):
