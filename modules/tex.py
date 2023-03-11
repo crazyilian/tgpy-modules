@@ -1,7 +1,7 @@
 """
     description: apply tex automatically and via .tex
     name: tex
-    version: 0.3.4
+    version: 0.3.5
     needs_pip:
       unicodeit: unicodeit
 """
@@ -69,7 +69,7 @@ def reset_replacements():
 
 
 def add_replacements(aliases):
-    for (key, alias) in aliases:
+    for (key, alias) in aliases.items():
         val = REPLS_DICT.get(alias, alias)
         REPLS_DICT[key] = val
     REPLS.clear()
