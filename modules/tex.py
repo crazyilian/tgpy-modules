@@ -1,7 +1,7 @@
 """
     description: apply tex automatically and via .tex
     name: tex
-    version: 0.3.5
+    version: 0.3.6
     needs_pip:
       unicodeit: unicodeit
 """
