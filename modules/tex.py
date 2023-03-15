@@ -25,7 +25,7 @@ AUTOACTIVATE = ['^', r'\alpha', r'\beta', r'\Gamma', r'\gamma', r'\Delta', r'\de
                 r'\hookleftarrow', r'\hookrightarrow', r'\leftharpoonup', r'\rightharpoonup', r'\leftharpoondown',
                 r'\rightharpoondown', r'\langle', r'\rangle', r'\vee', r'\wedge', r'\bigvee', r'\bigwedge', r'\bigcap',
                 r'\bigcup', r'\bigoplus', r'\nsubset', r'\nsubseteq', r'\notin', r'\square', r'\blacksquare', r'\ldots',
-                r'\nsupset', r'\nsupseteq', r'\impliedby']
+                r'\nsupset', r'\nsupseteq', r'\impliedby', r'\ni', r'\notni']
 
 ALIAS = {'\\' + c * 2: f'\\mathbb{{{c}}}' for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'}
 ALIAS |= {r'\Alpha': 'A', r'\Beta': 'B', r'\Epsilon': 'E', r'\Zeta': 'Z', r'\Eta': 'H', r'\Iota': 'I', r'\Kappa': 'K',
