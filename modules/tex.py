@@ -1,7 +1,7 @@
 """
     description: apply tex automatically and via .tex
     name: tex
-    version: 0.3.6
+    version: 0.3.7
     needs_pip:
       unicodeit: unicodeit
 """
@@ -51,7 +51,8 @@ ALIAS |= {
     r'\not\superset': r'\nsuperset',
     r'\not\subseteq': r'\nsubseteq',
     r'\not\subset': r'\nsubset',
-    r'\not\exists': r'\nexists'
+    r'\not\exists': r'\nexists',
+    r'\not': r'\not'
 }
 
 AUTOACTIVATE.extend(ALIAS.keys())
