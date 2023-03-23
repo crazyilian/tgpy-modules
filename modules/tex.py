@@ -1,7 +1,7 @@
 """
     description: apply tex automatically and via .tex
     name: tex
-    version: 0.3.7
+    version: 0.3.8
     needs_pip:
       unicodeit: unicodeit
 """
@@ -43,7 +43,6 @@ ALIAS |= {
 }
 
 ALIAS |= {
-    r'\not=': r'\neq',
     r'\not\in': r'\notin',
     r'\not\supseteq': r'\nsupseteq',
     r'\not\supset': r'\nsupset',
@@ -51,15 +50,22 @@ ALIAS |= {
     r'\not\superset': r'\nsuperset',
     r'\not\subseteq': r'\nsubseteq',
     r'\not\subset': r'\nsubset',
-    r'\not\exists': r'\nexists',
-    r'\not': r'\not'
+    r'\not\exists': r'\nexists'
 }
 
 AUTOACTIVATE.extend(ALIAS.keys())
 
 REPLS = unicodeit.data.REPLACEMENTS
+REPLS.remove(('\\not', '\u0338'))
 REPLS_DICT = dict(REPLS)
 unicodeit_REPLACEMENTS = REPLS.copy()
+
+unicodeit.data.SUBSUPERSCRIPTS += [
+    ('^/', '⸍'),
+    ('_/', '⸝'),
+    ('^\\', '⸌'),
+    ('_\\', '⸜')
+]
 
 
 def reset_replacements():
