@@ -4,7 +4,7 @@
     needs_pip:
         zstd: zstd
         base65536: base65536
-    version: 0.0.1
+    version: 0.0.2
 """
 import telethon
 import random
@@ -96,7 +96,7 @@ class Ladno:
 
     async def share_compressed(self):
         """share compressed python list of files"""
-        arr = [repr((f['id'], f['access_hash'], f['file_reference'])) for f in self._get_files()]
+        arr = [(f['id'], f['access_hash'], f['file_reference']) for f in self._get_files()]
         await ctx.msg.respond(f'<code>{compress(repr(arr))}</code>')
         return f'Shared {len(arr)} files'
 
