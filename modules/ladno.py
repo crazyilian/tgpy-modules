@@ -1,10 +1,12 @@
 """
-    description: send random file on `ladno()`'
+    description: send random file on `ladno()` and `.ладно`
     name: ladno
     needs_pip:
         zstd: zstd
         base65536: base65536
-    version: 0.0.2
+    needs:
+        dot: 0.1.0
+    version: 0.1.0
 """
 import telethon
 import random
@@ -186,5 +188,11 @@ class Ladno:
 
 
 ladno = Ladno()
+
+
+@dot("ладно")
+def ladno_handler(msg):
+    return ladno()
+
 
 __all__ = ['ladno']
