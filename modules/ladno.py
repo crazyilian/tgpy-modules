@@ -6,7 +6,7 @@
         base65536: base65536
     needs:
         dot: 0.1.0
-    version: 0.1.0
+    version: 0.1.1
 """
 import telethon
 import random
@@ -191,7 +191,11 @@ ladno = Ladno()
 
 
 @dot("ладно")
-def ladno_handler(msg):
+def ladno_handler(*args):
+    if len(args) > 0:
+        ind = args[0]
+        if ind[0].isdigit() or (ind[0].startswith('-') and ind[0][1:].isdigit()):
+            return ladno(int(ind))
     return ladno()
 
 
