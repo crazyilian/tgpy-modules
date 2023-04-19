@@ -6,7 +6,7 @@
         base65536: base65536
     needs:
         dot: 0.1.0
-    version: 0.1.3
+    version: 0.1.4
 """
 import telethon
 import random
@@ -73,9 +73,10 @@ class Ladno:
     async def __call__(self, ind=None):
         """`send(ind)` but removes call message"""
         await ctx.msg.delete()
-        return await self.send(ind)
+        r = await ctx.msg.get_reply_message()
+        return await self.send(ind, r)
 
-    async def send(self, ind=None):
+    async def send(self, ind=None, reply=None):
         """Send file with index `ind`. If `ind` is None, choose random one."""
         files = self._get_files()
         if len(files) == 0:
@@ -84,7 +85,7 @@ class Ladno:
             file = random.choice(files)
         else:
             file = files[ind]
-        await ctx.msg.respond(file=self._to_tg_file(file))
+        await ctx.msg.respond(file=self._to_tg_file(file), reply_to=reply)
         return 'Done'
 
     async def send_all(self):
