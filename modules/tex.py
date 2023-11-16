@@ -1,7 +1,7 @@
 """
     description: apply tex automatically and via .tex
     name: tex
-    version: 0.3.9
+    version: 0.4
     needs_pip:
       unicodeit: unicodeit
 """
@@ -86,17 +86,72 @@ def add_replacements(aliases):
     REPLS.sort(key=lambda el: -len(el[0]))
 
 
+msg_state = {
+    'tex': tgpy.api.config.get('tex.set_ntex', {}),
+    'ntex': tgpy.api.config.get('tex.set_tex', {})
+}
+
+
+def add_to_state(chat_id, msg_id, state):
+    if state not in msg_state:
+        return
+    st = msg_state[state]
+    if chat_id not in st:
+        st[chat_id] = set()
+    st[chat_id].add(msg_id)
+    tgpy.api.config.set(f'tex.set_{state}.{chat_id}', list(st[chat_id]))
+
+
+def remove_from_state(chat_id, msg_id, state):
+    if state not in msg_state:
+        return
+    st = msg_state[state]
+    if chat_id not in st:
+        return
+    st[chat_id].remove(msg_id)
+    tgpy.api.config.set(f'tex.set_{state}.{chat_id}', list(st[chat_id]))
+
+
+def get_state(chat_id, msg_id):
+    is_tex = msg_id in msg_state['tex'].get(chat_id, [])
+    is_ntex = msg_id in msg_state['ntex'].get(chat_id, [])
+    if is_tex and not is_ntex:
+        return 'tex'
+    if is_ntex and not is_tex:
+        return 'ntex'
+    return None
+
+
 async def tex_hook(message=None, is_edit=None):
     text = message.text
+    chat_id = str(message.chat_id)
+    msg_id = message.id
     if text.startswith(".tex ") or text.startswith(".tex\n"):
+        remove_from_state(chat_id, msg_id, 'ntex')
+        add_to_state(chat_id, msg_id, 'tex')
         text = text[5:]
     elif text.startswith(".ntex ") or text.startswith(".ntex\n"):
+        remove_from_state(chat_id, msg_id, 'tex')
+        add_to_state(chat_id, msg_id, 'ntex')
         return await message.edit(text[6:])
     else:
-        is_code_in_msg = any(isinstance(ent, telethon.tl.types.MessageEntityCode) for ent in (message.entities or []))
-        is_tex_text = is_autotex() and any(c in text for c in AUTOACTIVATE)
-        if not is_tex_text or is_code_in_msg:
+        state = get_state(chat_id, msg_id)
+        if state == 'tex':
+            pass
+        elif state == 'ntex':
             return
+        elif not is_autotex():
+            return
+        else:
+            is_code_in_msg = any(
+                isinstance(ent, (
+                    telethon.tl.types.MessageEntityCode,
+                    telethon.tl.types.MessageEntityPre
+                )) for ent in (message.entities or [])
+            )
+            is_tex_text = any(c in text for c in AUTOACTIVATE)
+            if not is_tex_text or is_code_in_msg:
+                return
 
     reset_replacements()
     add_replacements(ALIAS)
