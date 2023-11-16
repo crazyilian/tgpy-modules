@@ -69,6 +69,12 @@ unicodeit.data.SUBSUPERSCRIPTS += [
     ('_\\', '⸜')
 ]
 
+msg_state = {
+    'tex': {key: set(value) for key, value in tgpy.api.config.get('tex.set_tex', {}).items()},
+    'ntex': {key: set(value) for key, value in tgpy.api.config.get('tex.set_ntex', {}).items()}
+}
+
+
 
 def reset_replacements():
     global REPLS_DICT
@@ -84,12 +90,6 @@ def add_replacements(aliases):
     REPLS.clear()
     REPLS.extend(REPLS_DICT.items())
     REPLS.sort(key=lambda el: -len(el[0]))
-
-
-msg_state = {
-    'tex': tgpy.api.config.get('tex.set_ntex', {}),
-    'ntex': tgpy.api.config.get('tex.set_tex', {})
-}
 
 
 def add_to_state(chat_id, msg_id, state):
