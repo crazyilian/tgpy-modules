@@ -1,7 +1,7 @@
 """
     description: apply tex automatically and via .tex
     name: tex
-    version: 0.4.0
+    version: 0.4.1
     needs_pip:
       unicodeit: unicodeit
 """
@@ -98,6 +98,8 @@ def add_to_state(chat_id, msg_id, state):
     st = msg_state[state]
     if chat_id not in st:
         st[chat_id] = set()
+    elif msg_id in st[chat_id]:
+        return
     st[chat_id].add(msg_id)
     tgpy.api.config.set(f'tex.set_{state}.{chat_id}', list(st[chat_id]))
 
@@ -106,7 +108,7 @@ def remove_from_state(chat_id, msg_id, state):
     if state not in msg_state:
         return
     st = msg_state[state]
-    if chat_id not in st:
+    if chat_id not in st or msg_id not in st[chat_id]:
         return
     st[chat_id].remove(msg_id)
     tgpy.api.config.set(f'tex.set_{state}.{chat_id}', list(st[chat_id]))
