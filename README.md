@@ -17,6 +17,8 @@ Install requirements in your TGPy environment. For example
 ~/tgpy-venv/bin/python3 -m pip install -r tgpy-modules.git/requirements.txt
 ```
 
+The first time you run TGPy with these modules, you may be asked to enter some data (e.g. bot token for `pet_bot.py`).
+
 ## Updating
 
 Just `git pull` cloned repo. You can do this in terminal or inside telegram:
