@@ -36,13 +36,13 @@ async def get_user_name(id):
     return f'<a href="tg://user?id={user.id}">{user.first_name}</a>'
 
 
-async def track_last_seen_add(*user_entities):
+async def track_last_seen_add(*user_entities, ignore_if_exists=True):
     logger.print("Adding", user_entities)
     config = get_config()
     new_ids = []
     for user_entity in user_entities:
         user_id = user_entity if isinstance(user_entity, int) else (await client.get_entity(user_entity)).id
-        if user_id in config['user_ids']:
+        if user_id in config['user_ids'] and ignore_if_exists:
             continue
         new_ids.append(user_id)
         config['user_ids'].append(user_id)
@@ -81,6 +81,6 @@ async def track_last_seen_remove(*user_entities):
     return f"Removed {cnt} users\n\nChanges will be applied after restart()"
 
 
-asyncio.create_task(track_last_seen_add(*get_config()['user_ids']))
+asyncio.create_task(track_last_seen_add(*get_config()['user_ids'], ignore_if_exists=False))
 
 __all__ = ['track_last_seen_add', 'track_last_seen_remove']
