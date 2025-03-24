@@ -47,31 +47,27 @@ async def join_request_handler(update):
     config[channel_id] = recent_requesters
     set_config(config)
 
-    new_user_names = []
-    cache_updated = False
-    for user_id in set(recent_requesters) - set(old_requesters):
-        try:
-            new_user_names.append(await get_user_name(user_id))
-        except ValueError:
-            if cache_updated:
-                logger.print(f'Cant get username of {user_id}')
-                continue
-            logger.print(f'GetChatInviteImportersRequest channel_id={channel_id}')
-            await client(telethon.functions.messages.GetChatInviteImportersRequest(
-                1710863601, limit=10,
-                requested=True, q='', offset_date=0, offset_user=telethon.tl.types.InputUserEmpty()
-            ))
-            cache_updated = True
-            try:
-                new_user_names.append(await get_user_name(user_id))
-            except ValueError:
-                logger.print(f'Cant get username of {user_id}')
+    if len(recent_requesters) == 0 or recent_requesters[-1] not in old_requesters:
+        return
+    user_id = recent_requesters[0]
 
-    new_user_names = [await get_user_name(user_id) for user_id in set(recent_requesters) - set(old_requesters)]
-    if len(new_user_names) > 0:
-        channel_name = await get_channel_name(channel_id)
-        message = '\n'.join([f'New joining requests in channel "{channel_name}"', *new_user_names])
-        await pet_bot.send(message)
+    try:
+        new_user_name = await get_user_name(user_id)
+    except ValueError:
+        logger.print(f'GetChatInviteImportersRequest channel_id={channel_id}')
+        await client(telethon.functions.messages.GetChatInviteImportersRequest(
+            1710863601, limit=4,
+            requested=True, q='', offset_date=0, offset_user=telethon.tl.types.InputUserEmpty()
+        ))
+        try:
+            new_user_name = await get_user_name(recent_requesters[0])
+        except ValueError:
+            logger.print(f'Cant get username of {user_id}')
+            new_user_name = None
+
+    channel_name = await get_channel_name(channel_id)
+    message = f'New joining requests in channel "{channel_name}"\n{new_user_name}'
+    await pet_bot.send(message)
 
 
 def channel_join_requests_add(channel_id):
