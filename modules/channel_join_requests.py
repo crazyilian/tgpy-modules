@@ -4,6 +4,8 @@
     origin: tgpy://modules/channel_join_requests
     priority: 1700000004
 """
+from multiprocessing.managers import Value
+
 logger = ConsoleLogger(f"{__name__.split('/')[-1]}\t| ")
 
 import telethon
@@ -46,6 +48,23 @@ async def join_request_handler(update):
     recent_requesters = update.recent_requesters
     config[channel_id] = recent_requesters
     set_config(config)
+
+    new_user_names = []
+    full_channel = False
+    for user_id in set(recent_requesters) - set(old_requesters):
+        try:
+            new_user_names.append(await get_user_name(user_id))
+        except ValueError:
+            if full_channel:
+                logger.print(f'Cant get username of {user_id}')
+                continue
+            logger.print(f'Full channel request channel_id={channel_id}')
+            await client(telethon.functions.channels.GetFullChannelRequest(channel_id))
+            full_channel = True
+            try:
+                new_user_names.append(await get_user_name(user_id))
+            except ValueError:
+                logger.print(f'Cant get username of {user_id}')
 
     new_user_names = [await get_user_name(user_id) for user_id in set(recent_requesters) - set(old_requesters)]
     if len(new_user_names) > 0:
