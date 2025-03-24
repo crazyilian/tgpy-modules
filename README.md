@@ -1,6 +1,6 @@
 # TGPy modules by crazyilian
 
-Modules pack for [TGPy](https://tgpy.tmat.me/).
+Modules pack for [TGPy](https://tgpy.tmat.me/). 
 
 ## Installation
 
@@ -8,7 +8,7 @@ Clone repo and copy or create symlink to all modules. For example:
 
 ```bash
 git clone https://github.com/crazyilian/tgpy-modules.git
-ln -s tgpy-modules.git/modules/* ~/.config/tgpy/modules/*
+ln -s path/to/tgpy-modules.git/modules/* ~/.config/tgpy/modules
 ```
 
 Install requirements in your TGPy environment. For example
