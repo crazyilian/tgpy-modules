@@ -42,10 +42,11 @@ async def track_last_seen_add(*user_entities, ignore_if_exists=True):
     new_ids = []
     for user_entity in user_entities:
         user_id = user_entity if isinstance(user_entity, int) else (await client.get_entity(user_entity)).id
-        if user_id in config['user_ids'] and ignore_if_exists:
-            continue
-        new_ids.append(user_id)
-        config['user_ids'].append(user_id)
+        if user_id not in config['user_ids']:
+            config['user_ids'].append(user_id)
+            new_ids.append(user_id)
+        elif not ignore_if_exists:
+            new_ids.append(user_id)
     set_config(config)
 
     if len(new_ids) == 0:
