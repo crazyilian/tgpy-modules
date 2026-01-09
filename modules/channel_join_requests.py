@@ -56,7 +56,7 @@ async def join_request_handler(update):
     except ValueError:
         logger.print(f'GetChatInviteImportersRequest channel_id={channel_id}')
         await client(telethon.functions.messages.GetChatInviteImportersRequest(
-            1710863601, limit=4,
+            channel_id, limit=4,
             requested=True, q='', offset_date=0, offset_user=telethon.tl.types.InputUserEmpty()
         ))
         try:
