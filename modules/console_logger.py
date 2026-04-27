@@ -13,9 +13,10 @@ class ConsoleLogger:
         self.print("logger initialized")
 
     def print(self, *args, sep=' ', end='\n'):
-        tm = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        text = sep.join(map(str, args))
-        print(f"[{tm}] {self.prefix}{text}{end}", end='')
+        with open("/dev/tty", "w") as f:
+            tm = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            text = sep.join(map(str, args))
+            f.write(f"[{tm}] {self.prefix}{text}{end}")
 
     def input(self, str):
         self.print(str, end='')
