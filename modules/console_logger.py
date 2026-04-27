@@ -17,6 +17,7 @@ class ConsoleLogger:
             tm = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             text = sep.join(map(str, args))
             f.write(f"[{tm}] {self.prefix}{text}{end}")
+            f.flush()
 
     def input(self, str):
         self.print(str, end='')
